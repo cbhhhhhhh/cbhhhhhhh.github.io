@@ -1,0 +1,35 @@
+{{ define "main" }}
+{{- $mainSections := .Scratch.Get "mainSections" -}}
+{{- $pages := where .Site.RegularPages "Type" "in" $mainSections -}}
+{{- $pages = where $pages "Params.hiddenfromhomepage" "!=" true -}}
+{{- $life := where $pages "Params.categories" "intersect" (slice "thoughts") -}}
+{{- $pages = complement $life $pages -}}
+{{- $paginator := .Paginate $pages 20 -}}
+
+
+{{- with .Content -}}
+  <section class="home-content prose">{{ . }}</section>
+{{- end -}}
+
+<section class="home-recent">
+  <div class="section-heading">
+    <h1>最近更新 | </h1>
+    <a href="{{ "posts/" | relURL }}">所有文章</a>
+  </div>
+  <ul class="home-recent-list">
+    {{- range $paginator.Pages -}}
+      <li>
+        <a class="home-recent-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{- with .Params.series -}}
+          {{- range first 1 . }}<a class="home-recent-tax is-series" href="{{ (printf "/series/%s/" (. | urlize)) | relURL }}">{{ . }}</a>{{ end -}}
+        {{- end -}}
+        {{- with .Params.tags -}}
+          {{- range first 2 . }}<a class="home-recent-tax is-tag" href="{{ (printf "/tags/%s/" (. | urlize)) | relURL }}">{{ . }}</a>{{ end -}}
+        {{- end -}}
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+      </li>
+    {{- end -}}
+  </ul>
+</section>
+{{ partial "pagination.html" . }}
+{{ end }}

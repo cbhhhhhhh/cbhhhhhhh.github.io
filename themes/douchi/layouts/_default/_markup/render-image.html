@@ -1,0 +1,6 @@
+<figure class="article-image-wrap">
+  <button class="article-image-button" type="button" data-article-image-src="{{ .Destination | safeURL }}" data-article-image-alt="{{ .Text }}"{{ with .Title }} data-article-image-title="{{ . }}"{{ end }} aria-label="放大查看图片">
+    <img class="article-image" src="{{ .Destination | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
+  </button>
+  {{- with .Title }}<figcaption class="article-image-caption">{{ . }}</figcaption>{{ end -}}
+</figure>

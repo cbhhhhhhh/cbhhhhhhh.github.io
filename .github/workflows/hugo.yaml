@@ -1,0 +1,58 @@
+name: Publish blog
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: "0.168.0"
+  HUGO_ENVIRONMENT: production
+  TZ: Asia/Shanghai
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/configure-pages@v6
+        id: pages
+
+      - name: Install Hugo
+        shell: bash
+        run: |
+          mkdir -p "${RUNNER_TEMP}/hugo-bin"
+          curl -fsSL \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_linux-amd64.tar.gz" \
+            -o "${RUNNER_TEMP}/hugo.tar.gz"
+          tar -xzf "${RUNNER_TEMP}/hugo.tar.gz" \
+            -C "${RUNNER_TEMP}/hugo-bin"
+          echo "${RUNNER_TEMP}/hugo-bin" >> "${GITHUB_PATH}"
+
+      - name: Build
+        shell: bash
+        run: |
+          hugo --gc --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./public
+
+      - uses: actions/deploy-pages@v5
+        id: deployment

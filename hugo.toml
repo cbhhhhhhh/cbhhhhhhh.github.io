@@ -1,0 +1,63 @@
+baseURL = "https://cbhhhhhhh.github.io/"
+title = "my blog"
+theme = "douchi"
+
+locale = "zh-CN"
+defaultContentLanguage = "zh-cn"
+hasCJKLanguage = true
+timeZone = "Asia/Shanghai"
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+series = "series"
+
+[outputs]
+home = ["HTML", "JSON"]
+
+[params]
+description = "记录学习、生活与思考。"
+mainSections = ["posts"]
+defaultTheme = "auto"
+
+[params.home.profile]
+avatarURL = "/avatar.jpg"
+
+[params.search]
+enable = true
+placeholder = "搜索"
+
+[params.home.heatmap]
+enable = true
+title = "博文统计"
+days = 365
+
+[params.page.toc]
+enable = true
+
+[params.page.comment]
+enable = false
+
+[params.footer]
+since = 2026
+license = ""
+
+[[menu.main]]
+name = "文章 | POST"
+url = "/posts/"
+weight = 1
+
+[[menu.main]]
+name = "系列 | SERIES"
+url = "/series/"
+weight = 2
+
+[[menu.main]]
+name = "生活 | LIFE"
+url = "/categories/life/"
+weight = 3
+
+[[menu.main]]
+name = "关于 | ABOUT"
+url = "/about/"
+weight = 4
